@@ -92,3 +92,24 @@ SELECT
 FROM products P INNER JOIN orders O ON P.id = O.product_id
 GROUP BY P.brand_name;
 ```
+## 2-B
+``` sql
+SELECT 
+	U.id,
+	U.nickname,
+	NVL(PO.buy_count,0) AS buy_count,
+	NVL(PO.buy_amount,0) AS buy_amount,
+	(CASE WHEN NVL(buy_count,0) >= 4 AND NVL(buy_amount,0) >= 1000000 THEN 'Platinum'
+	 WHEN NVL(buy_count,0) >= 3 AND NVL(buy_amount,0) >= 500000 THEN 'VIP'
+	 WHEN NVL(buy_count,0) >= 2 AND NVL(buy_amount,0) >= 300000 THEN 'Friend' ELSE 'Normal' END) AS rating
+FROM users U LEFT OUTER JOIN
+(
+	SELECT 
+		O.user_id,
+		SUM(O.count) AS buy_count,
+		SUM(P.cost * O.count) AS buy_amount
+	FROM products P INNER JOIN orders O ON P.id = O.product_id
+	WHERE O.created_at >= ADDDATE(NOW(), INTERVAL -6 MONTH)
+	GROUP BY O.user_id
+) PO ON U.id = PO.user_id;
+```
