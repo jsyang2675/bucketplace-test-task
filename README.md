@@ -20,3 +20,66 @@ SELECT * FROM (
 ) T
 ORDER BY T.scrapper_count DESC;
 ```
+## 1-C-1
+``` sql
+SELECT 
+	T.id,
+	T.title,
+	T.image_url,
+	T.scrap_count
+FROM (
+	SELECT 
+		SB.id,
+		SB.title,
+		C.image_url,
+		(SELECT COUNT(*) FROM scraps WHERE card_id = C.id) AS scrap_count,
+		ROW_NUMBER () OVER (PARTITION BY SB.id ORDER BY S.created_at) AS rn
+	FROM scrapbooks SB INNER JOIN scraps S ON S.scrapbook_id = SB.id
+	INNER JOIN cards C ON C.id = S.card_id
+	WHERE SB.user_id = 1
+	ORDER BY SB.created_at DESC
+) T
+WHERE T.rn = 1;
+```
+## 1-C-2
+``` sql 
+SELECT 
+	T.id,
+	T.title,
+	T.image_url,
+	T.scrap_count
+FROM (
+	SELECT 
+		SB.id,
+		SB.title,
+		C.image_url,
+		(SELECT COUNT(*) FROM scraps WHERE card_id = C.id) AS scrap_count,
+		ROW_NUMBER () OVER (PARTITION BY SB.id ORDER BY S.created_at DESC) AS rn
+	FROM scrapbooks SB INNER JOIN scraps S ON S.scrapbook_id = SB.id
+	INNER JOIN cards C ON C.id = S.card_id
+	WHERE SB.user_id = 1
+	ORDER BY SB.created_at DESC
+) T
+WHERE T.rn = 1;
+```
+## 1-C-3
+``` sql
+SELECT 
+	T.id,
+	T.title,
+	T.image_url,
+	T.scrap_count
+FROM (
+	SELECT 
+		SB.id,
+		SB.title,
+		C.image_url,
+		(SELECT COUNT(*) FROM scraps WHERE card_id = C.id) AS scrap_count,
+		ROW_NUMBER () OVER (PARTITION BY SB.id ORDER BY C.created_at DESC) AS rn
+	FROM scrapbooks SB INNER JOIN scraps S ON S.scrapbook_id = SB.id
+	INNER JOIN cards C ON C.id = S.card_id
+	WHERE SB.user_id = 1
+	ORDER BY SB.created_at DESC
+) T
+WHERE T.rn = 1;
+```
