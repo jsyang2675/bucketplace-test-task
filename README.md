@@ -83,3 +83,12 @@ FROM (
 ) T
 WHERE T.rn = 1;
 ```
+## 2-A
+``` sql
+SELECT 
+	P.brand_name,
+	SUM(O.count) AS buy_count,
+	SUM(P.cost * O.count) AS buy_amount
+FROM products P INNER JOIN orders O ON P.id = O.product_id
+GROUP BY P.brand_name;
+```
