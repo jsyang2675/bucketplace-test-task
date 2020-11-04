@@ -154,3 +154,5 @@ FROM (
 WHERE T.rn = 1
 GROUP BY T.name;
 ```
+## 3-A
+![오늘의집_DB설계](https://user-images.githubusercontent.com/44989888/98084187-cb65d480-1ebe-11eb-8908-24ab8e243f7d.png)
