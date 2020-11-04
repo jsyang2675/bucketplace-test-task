@@ -130,6 +130,6 @@ FROM products P
 INNER JOIN orders O ON O.product_id = P.id 
 INNER JOIN product_categories PC ON PC.product_id = P.id 
 INNER JOIN categories C ON C.id = PC.category_id
-WHERE C.first = '가구'
-AND C.second = '의자';
+WHERE C.`first` = '가구'
+AND C.`second` = '의자';
 ```
