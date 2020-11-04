@@ -156,3 +156,73 @@ GROUP BY T.name;
 ```
 ## 3-A
 ![오늘의집_DB설계](https://user-images.githubusercontent.com/44989888/98084187-cb65d480-1ebe-11eb-8908-24ab8e243f7d.png)
+## 4-A
+``` java
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class AlgorithmTest01 {
+    public static void main(String[] args) {
+        try {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("배열의 사이즈를 입력하세요");
+            int length = getInputNumber(scanner);
+
+            Integer[] numberA = new Integer[length];
+            Integer[] numberB = new Integer[length];
+
+            String textArrayA = "";
+            for(int i=0; i<length; i++) {
+                System.out.println("A배열의 " + (i+1) + "번 째 값을 입력해 주세요.");
+                numberA[i] = getInputNumber(scanner);
+                textArrayA += numberA[i];
+                if(i<length-1) textArrayA+=",";
+            }
+
+            String textArrayB = "";
+            for(int i=0; i<length; i++) {
+                System.out.println("B배열의 " + (i+1) + "번 째 값을 입력해 주세요.");
+                numberB[i] = getInputNumber(scanner);
+                textArrayB += numberB[i];
+                if(i<length-1) textArrayB+=",";
+            }
+
+            System.out.println("A = [" + textArrayA + "] B = [" + textArrayB + "]");
+
+            //입력 값 순차적으로 정렬
+            Arrays.sort(numberA);
+            Arrays.sort(numberB);
+
+            int totalMin = 0;
+            int indexA = 0;
+            int indexB = length-1;
+            while (indexA <= length-1) {
+                totalMin += numberA[indexA] * numberB[indexB];
+                indexA++;
+                indexB--;
+            }
+
+            System.out.println("결과 값은 " + totalMin + "입니다.");
+
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static int getInputNumber(Scanner scanner) {
+        if(scanner.hasNextInt()) {
+            int number = scanner.nextInt();
+            if(number <= 0 || number > 10) {
+                throw new IllegalArgumentException("1~10 사이의 숫자만 입력 가능합니다. 종료합니다.");
+            }
+            return number;
+        }
+        else {
+            throw new IllegalArgumentException("1~10 사이의 숫자만 입력 가능합니다. 종료합니다.");
+        }
+    }
+}
+```
+
