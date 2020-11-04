@@ -133,3 +133,24 @@ INNER JOIN categories C ON C.id = PC.category_id
 WHERE C.`first` = '가구'
 AND C.`second` = '의자';
 ```
+## 2-D
+``` sql
+SELECT 
+	T.name,
+	SUM(T.count) AS buy_count,
+	SUM(T.cost * T.count) AS buy_amount
+FROM (
+	SELECT
+		C.`second` as name,
+		P.cost,
+		O.count,
+		ROW_NUMBER () OVER (PARTITION BY PC.product_id, PC.category_id ORDER BY PC.`position`) AS rn
+	FROM products P 
+	INNER JOIN orders O ON O.product_id = P.id 
+	INNER JOIN product_categories PC ON PC.product_id = P.id
+	INNER JOIN categories C ON C.id = PC.category_id
+	WHERE C.`first` = '가구'
+) T
+WHERE T.rn = 1
+GROUP BY T.name;
+```
